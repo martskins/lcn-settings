@@ -37,3 +37,25 @@ If you prefer lcn-settings not to set any mapping and do that yourself you can d
 ```
 let lcn_settings#enable_mappings = 0
 ```
+
+This plugin will try to auto-discover any installed servers and use them if available.
+The decision on which server to use is 100% opinionated, for each filetype it will try to use the first on from the following list:
+
+```
+go: gopls
+gomod: gopls
+rust: rust-analyzer, rls
+javascript: javascript-typescript-stdio, lsp-tsserver
+typescript: javascript-typescript-stdio, lsp-tsserver
+python: pyls, pytight-langserver
+cpp: ccls, clangd, cquery
+c: ccls, clangd, cquery
+```
+
+If you prefer to set a different language server for a filetype included above or if your filetype is not listed above, you can manually configure it like you would normally do with LanguageClient-neovim:
+
+```
+let g:LanguageClient_serverCommands = {
+  \ 'go': ['/path/to/some/go/lsp/server']
+  \ }
+```
