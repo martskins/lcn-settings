@@ -1,10 +1,12 @@
 This plugin adds the basic LanguageClient-neovim configuration needed to get the most out of it.
 
-## INSTALLATION
+## Installation
 
 ```
 Plug 'martskins/lcn-settings'
 ```
+
+## Features
 
 By default it will enable most functionality in LanguageClient-neovim and it will also set a set the following mappings:
 
