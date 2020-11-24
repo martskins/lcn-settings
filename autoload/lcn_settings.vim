@@ -147,7 +147,7 @@ function! GetPythonCommand() abort
   return v:null
 endfunction
 
-function! lcnsane#GetCommands() abort
+function! lcn_settings#GetCommands() abort
   let s:output = {}
   let s:rust_command = GetRustCommand()
   if s:rust_command isnot v:null

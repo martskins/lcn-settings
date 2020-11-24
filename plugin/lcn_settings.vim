@@ -4,7 +4,7 @@ endfunction
 
 augroup LanguageClientConfig
   autocmd!
-  let g:LanguageClient_serverCommands = lcnsane#GetCommands()
+  let g:LanguageClient_serverCommands = lcn_settings#GetCommands()
 
   if !HasConfigured('LanguageClient_windowLogMessageLevel')
     let g:LanguageClient_windowLogMessageLevel = 'ERROR'
