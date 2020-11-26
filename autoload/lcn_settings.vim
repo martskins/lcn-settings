@@ -1,6 +1,6 @@
 function! GetConfiguredCommand(filetype) abort
   let l:command = get(get(g:, 'LanguageClient_serverCommands', {}), a:filetype)
-  if len(l:command) ==# 0
+  if l:command is v:null || len(l:command) ==# 0
     return v:null
   endif
 
@@ -147,11 +147,28 @@ function! GetPythonCommand() abort
   return v:null
 endfunction
 
+function! GetVimCommand() abort
+  if HasConfiguredCommand('vim')
+    return GetConfiguredCommand('vim')
+  endif
+
+  if executable('vim-language-server')
+    return ['vim-language-server', '--stdio']
+  endif
+
+  return v:null
+endfunction
+
 function! lcn_settings#GetCommands() abort
   let s:output = {}
   let s:rust_command = GetRustCommand()
   if s:rust_command isnot v:null
     let s:output.rust = s:rust_command
+  endif
+
+  let s:vim_command = GetVimCommand()
+  if s:vim_command isnot v:null
+    let s:output.vim = s:vim_command
   endif
 
   let s:go_command = GetGoCommand()
