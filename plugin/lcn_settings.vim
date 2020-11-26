@@ -18,6 +18,10 @@ augroup LanguageClientConfig
     let g:LanguageClient_loggingFile = '/tmp/lcn.log'
   endif
 
+  if !HasConfigured('LanguageClient_serverStderr')
+    let g:LanguageClient_serverStderr = '/tmp/lcn_server.log'
+  endif
+
   if !HasConfigured('LanguageClient_hoverPreview')
     let g:LanguageClient_hoverPreview = 'always'
   endif
@@ -86,6 +90,12 @@ augroup LanguageClientConfig
     endif
   endif
 
+  function! LanguageClientRestart()
+    :LanguageClientStop
+    sleep 2
+    :LanguageClientStart
+  endfunction
+
   function! WorkspaceSymbols()
     let query = input('Enter query: ')
     call LanguageClient#workspace_symbol(query)
@@ -111,10 +121,28 @@ augroup LanguageClientConfig
     nmap <buffer> <silent>F            <Plug>(lcn-format-sync)
     nmap <buffer> <silent><c-s><c-s>   <Plug>(lcn-highlight)
     nmap <buffer> <silent><c-s><c-h>   :call LanguageClient#clearDocumentHighlight()<CR>
-    nmap <buffer> <silent><c-]>        <Plug>(lcn-diagnostics-next)
-    nmap <buffer> <silent><c-[>        <Plug>(lcn-diagnostics-prev)
+    nmap <buffer> <silent><leader>dn   <Plug>(lcn-diagnostics-next)
+    nmap <buffer> <silent><leader>dp   <Plug>(lcn-diagnostics-prev)
   endfunction
 
+  function! LCNAutocmds()
+    if !LanguageClient#HasCommand(&filetype)
+      return
+    endif
+
+    if get(g:, 'lcn_settings#format_on_save', 1) && get(b:, 'lcn_settings#format_on_save', 1)
+      autocmd BufWritePost <buffer> call LanguageClient#textDocument_formatting_sync()
+    endif
+  endfunction
+
+  " register mappings in vim-repeat if available.
+  if exists('*repeat#set')
+    silent! call repeat#set("\<Plug>(lcn-highlight)", v:count)
+    silent! call repeat#set("\<Plug>(lcn-diagnostics-prev)", v:count)
+    silent! call repeat#set("\<Plug>(lcn-diagnostics-next)", v:count)
+  endif
+
+  autocmd FileType * call LCNAutocmds()
   if get(g:, 'lcn_settings#enable_mappings', 1)
     autocmd FileType * call LCNMappings()
   endif
