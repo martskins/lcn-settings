@@ -27,7 +27,7 @@ augroup LanguageClientConfig
   endif
 
   if !HasConfigured('LanguageClient_completionPreferTextEdit')
-    let g:LanguageClient_completionPreferTextEdit = 0
+    let g:LanguageClient_completionPreferTextEdit = 1
   endif
 
   if !HasConfigured('LanguageClient_useVirtualText')
@@ -131,7 +131,7 @@ augroup LanguageClientConfig
     endif
 
     if get(g:, 'lcn_settings#format_on_save', 1) && get(b:, 'lcn_settings#format_on_save', 1)
-      autocmd BufWritePost <buffer> call LanguageClient#textDocument_formatting_sync()
+      autocmd BufWritePre <buffer> call LanguageClient#textDocument_formatting_sync()
     endif
   endfunction
 
