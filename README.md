@@ -59,3 +59,8 @@ let g:LanguageClient_serverCommands = {
   \ 'go': ['/path/to/some/go/lsp/server']
   \ }
 ```
+
+This plugin also adds format on save capabilities by setting `g:lcn_settings#format_on_save` to the list of filetypes on which you want to run format on save, for example:
+```
+let g:lcn_settings#format_on_save = ['go', 'rust']
+```

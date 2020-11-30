@@ -90,6 +90,13 @@ augroup LanguageClientConfig
     endif
   endif
 
+  " register mappings in vim-repeat if available.
+  if exists('*repeat#set')
+    silent! call repeat#set("\<Plug>(lcn-highlight)", v:count)
+    silent! call repeat#set("\<Plug>(lcn-diagnostics-prev)", v:count)
+    silent! call repeat#set("\<Plug>(lcn-diagnostics-next)", v:count)
+  endif
+
   function! LanguageClientRestart()
     :LanguageClientStop
     sleep 2
@@ -125,24 +132,20 @@ augroup LanguageClientConfig
     nmap <buffer> <silent><leader>dp   <Plug>(lcn-diagnostics-prev)
   endfunction
 
-  function! LCNAutocmds()
+  function! s:FormatOnSave()
     if !LanguageClient#HasCommand(&filetype)
       return
     endif
 
-    if get(g:, 'lcn_settings#format_on_save', 1) && get(b:, 'lcn_settings#format_on_save', 1)
-      autocmd BufWritePre <buffer> call LanguageClient#textDocument_formatting_sync()
+    let l:format_on_save = get(g:, 'lcn_settings#format_on_save', [])
+    if index(l:format_on_save, &filetype) ==# -1
+      return 
     endif
+
+    call LanguageClient#textDocument_formatting_sync()
   endfunction
 
-  " register mappings in vim-repeat if available.
-  if exists('*repeat#set')
-    silent! call repeat#set("\<Plug>(lcn-highlight)", v:count)
-    silent! call repeat#set("\<Plug>(lcn-diagnostics-prev)", v:count)
-    silent! call repeat#set("\<Plug>(lcn-diagnostics-next)", v:count)
-  endif
-
-  autocmd FileType * call LCNAutocmds()
+  autocmd BufWritePre * call s:FormatOnSave()
   if get(g:, 'lcn_settings#enable_mappings', 1)
     autocmd FileType * call LCNMappings()
   endif
