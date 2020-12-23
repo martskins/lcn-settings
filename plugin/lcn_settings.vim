@@ -6,6 +6,10 @@ augroup LanguageClientConfig
   autocmd!
   let g:LanguageClient_serverCommands = lcn_settings#GetCommands()
 
+  if !HasConfigured('LanguageClient_diagnosticsList')
+    let g:LanguageClient_diagnosticsList = 'Location'
+  endif
+
   if !HasConfigured('LanguageClient_windowLogMessageLevel')
     let g:LanguageClient_windowLogMessageLevel = 'ERROR'
   endif
@@ -128,8 +132,8 @@ augroup LanguageClientConfig
     nmap <buffer> <silent>F            <Plug>(lcn-format-sync)
     nmap <buffer> <silent><c-s><c-s>   <Plug>(lcn-highlight)
     nmap <buffer> <silent><c-s><c-h>   :call LanguageClient#clearDocumentHighlight()<CR>
-    nmap <buffer> <silent><leader>dn   <Plug>(lcn-diagnostics-next)
-    nmap <buffer> <silent><leader>dp   <Plug>(lcn-diagnostics-prev)
+    nmap <buffer> ]d   <Plug>(lcn-diagnostics-next)
+    nmap <buffer> [d   <Plug>(lcn-diagnostics-prev)
   endfunction
 
   autocmd BufWritePre * call lcn_settings#format#on_save()
