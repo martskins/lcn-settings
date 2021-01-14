@@ -64,3 +64,33 @@ This plugin also adds format on save capabilities by setting `g:lcn_settings#for
 ```
 let g:lcn_settings#format_on_save = ['go', 'rust']
 ```
+
+## Configured Servers
+
+Some servers use a detailed config instead of just running the binary, note that some of them also include some default server initialization options, should you need to override these you should set the server config for that filetype yourself.
+
+### rust-analyzer
+
+      {
+			\ 'name': 'rust-analyzer',
+			\ 'command': ['rust-analyzer'],
+			\ 'initializationOptions': {
+			\  'diagnostics': { "disabled": ["macro-error"] },
+			\  'procMacro': { "enable": v:true },
+			\  'cargo': { "loadOutDirsFromCheck": v:true },
+			\ },
+			\}
+
+### gopls
+
+      {
+			\ 'name': 'gopls',
+			\ 'command': ['gopls'],
+			\ 'initializationOptions': {
+			\  'usePlaceholders': v:true,
+			\  'codelens': {
+			\   'gc_details': v:true,
+			\   'test': v:true
+			\  }
+			\ },
+			\}

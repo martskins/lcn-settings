@@ -25,7 +25,16 @@ function! GetRustCommand() abort
   endif
 
   if executable('rust-analyzer')
-    return ['rust-analyzer']
+    return {
+			\ 'name': 'rust-analyzer',
+			\ 'command': ['rust-analyzer'],
+			\ 'initializationOptions': {
+			\  'diagnostics': { "disabled": ["macro-error"] },
+			\  'procMacro': { "enable": v:true },
+			\  'cargo': { "loadOutDirsFromCheck": v:true },
+			\ },
+			\}
+
   endif
 
   if executable('rls')
@@ -41,7 +50,17 @@ function! GetGoCommand() abort
   endif
 
   if executable('gopls')
-    return ['gopls']
+	return {
+		\ 'name': 'gopls',
+		\ 'command': ['gopls'],
+		\ 'initializationOptions': {
+		\  'usePlaceholders': v:true,
+		\  'codelens': {
+		\   'gc_details': v:true,
+		\   'test': v:true
+		\  }
+		\ },
+		\}
   endif
 
   return v:null
@@ -53,7 +72,17 @@ function! GetGomodCommand() abort
   endif
 
   if executable('gopls')
-    return ['gopls']
+	return {
+		\ 'name': 'gopls',
+		\ 'command': ['gopls'],
+		\ 'initializationOptions': {
+		\  'usePlaceholders': v:true,
+		\  'codelens': {
+		\   'gc_details': v:true,
+		\   'test': v:true
+		\  }
+		\ },
+		\}
   endif
 
   return v:null
